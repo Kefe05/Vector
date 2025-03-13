@@ -12,26 +12,17 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-
+// import dayjs from "dayjs";
 import { TrendingDown, TrendingUp } from "lucide-react";
-import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
+import { LineChart, CartesianGrid, XAxis, YAxis, Line } from "recharts";
 import {
   ChartConfig,
   ChartContainer,
   ChartLegend,
-  ChartLegendContent,
   ChartTooltip,
-  ChartTooltipContent,
 } from "../../components/ui/chart";
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "../../components/ui/card";
+import { Card } from "../../components/ui/card";
 
 import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react";
 
@@ -58,7 +49,7 @@ import {
 
 export type Payment = {
   id: string;
-  amount: number;
+  amount: string;
   status: "pending" | "interviewed" | "not interviewed" | "failed";
   email: string;
 };
@@ -66,31 +57,31 @@ export type Payment = {
 const data: Payment[] = [
   {
     id: "m5gr84i9",
-    amount: 316,
+    amount: "2019-01-25",
     status: "not interviewed",
     email: "ken99@example.com",
   },
   {
     id: "3u1reuv4",
-    amount: 242,
+    amount: "2019-01-25",
     status: "interviewed",
     email: "Abe45@example.com",
   },
   {
     id: "derv1ws0",
-    amount: 837,
+    amount: "2019-01-25",
     status: "pending",
     email: "Monserrat44@example.com",
   },
   {
     id: "5kma53ae",
-    amount: 874,
+    amount: "2019-01-25",
     status: "interviewed",
     email: "Silas22@example.com",
   },
   {
     id: "bhqecj4p",
-    amount: 721,
+    amount: "2019-01-25",
     status: "interviewed",
     email: "carmella@example.com",
   },
@@ -122,82 +113,37 @@ const DashboardHome = () => {
   return (
     <div className="w-full p-8 flex flex-col gap-6">
       <div className="flex w-full gap-4">
-        <Card className="flex-1 p-3">
-          <span>10</span>
+        <Card className="flex-1 p-3 border-none shadow-xs shadow-[#220901]/50">
+          <span className="text-5xl md:text-4xl sm:3xl min-[300]:2xl  font-bold">
+            10
+          </span>
           <span>Upcoming Interviews</span>
         </Card>
-        <Card className="flex-1 p-3">
+        <Card className="flex-1 p-3 shadow-xs shadow-[#220901]/50 border-none">
           <span>Date</span>
-          <span>Thursday, 14th March, 2025</span>
+          <span className="text-xl md:text-lg sm:text-md font-bold">
+            Thursday, 14th March, 2025
+          </span>
         </Card>
-        <Card className="flex-1 p-3">
-          <span>5</span>
-          <span>New Interviews Created</span>
+        <Card className="flex-1 p-3 shadow-xs shadow-[#220901]/50 border-none">
+          <span className="text-5xl md:text-4xl sm:3xl  font-bold">5</span>
+          <span>Interview Compeleted</span>
         </Card>
       </div>
-      <div className="flex gap-4">
+      <div className="flex gap-4 min-[300px]:flex-col min-[1140px]:flex-row">
         <DataTableDemo />
-        <Card className="flex-1 ">
-          <CardHeader>
-            <CardTitle>Area Chart - Icons</CardTitle>
-            <CardDescription>
-              Showing total visitors for the last 6 months
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <ChartContainer config={chartConfig}>
-              <AreaChart
-                accessibilityLayer
-                data={chartData}
-                margin={{
-                  left: 12,
-                  right: 12,
-                }}>
-                <CartesianGrid vertical={false} />
-                <XAxis
-                  dataKey="month"
-                  tickLine={false}
-                  axisLine={false}
-                  tickMargin={8}
-                  tickFormatter={(value) => value.slice(0, 3)}
-                />
-                <ChartTooltip
-                  cursor={false}
-                  content={<ChartTooltipContent indicator="line" />}
-                />
-                <Area
-                  dataKey="mobile"
-                  type="natural"
-                  fill="var(--color-mobile)"
-                  fillOpacity={0.4}
-                  stroke="var(--color-mobile)"
-                  stackId="a"
-                />
-                <Area
-                  dataKey="desktop"
-                  type="natural"
-                  fill="var(--color-desktop)"
-                  fillOpacity={0.4}
-                  stroke="var(--color-desktop)"
-                  stackId="a"
-                />
-                <ChartLegend content={<ChartLegendContent />} />
-              </AreaChart>
-            </ChartContainer>
-          </CardContent>
-          <CardFooter>
-            <div className="flex w-full items-start gap-2 text-sm">
-              <div className="grid gap-2">
-                <div className="flex items-center gap-2 font-medium leading-none">
-                  Trending up by 5.2% this month{" "}
-                  <TrendingUp className="h-4 w-4" />
-                </div>
-                <div className="flex items-center gap-2 leading-none text-muted-foreground">
-                  January - June 2024
-                </div>
-              </div>
-            </div>
-          </CardFooter>
+        <Card className="flex-1 border-none  ">
+          <ChartContainer config={chartConfig} className="w-full h-full">
+            <LineChart data={chartData}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="name" />
+              <YAxis />
+              <ChartTooltip />
+              <ChartLegend />
+              <Line type="monotone" dataKey="mobile" stroke="#220901" />
+              <Line type="monotone" dataKey="desktop" stroke="#edc2bf" />
+            </LineChart>
+          </ChartContainer>
         </Card>
       </div>
     </div>
@@ -243,7 +189,7 @@ export const columns: ColumnDef<Payment>[] = [
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
-          title
+          Title
           <ArrowUpDown />
         </Button>
       );
