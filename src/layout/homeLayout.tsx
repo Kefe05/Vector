@@ -9,9 +9,9 @@ export default function HomeLayout({
   return (
     <SidebarProvider>
       <AppSidebar />
-      <main>
+      <main className="w-screen">
         <SidebarTrigger />
-        {children}
+        <div className="w-full ">{children}</div>
       </main>
     </SidebarProvider>
   );

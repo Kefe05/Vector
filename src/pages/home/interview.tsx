@@ -1,5 +1,10 @@
+import { DataTableDemo } from "./index";
 const Interview = () => {
-  return <div>Interview</div>;
+  return (
+    <div>
+      <DataTableDemo />
+    </div>
+  );
 };
 
 export default Interview;
