@@ -46,6 +46,7 @@ import {
   TableHeader,
   TableRow,
 } from "../../components/ui/table";
+import Interview from "./interview";
 
 export type Payment = {
   id: string;
@@ -89,12 +90,12 @@ const data: Payment[] = [
 
 const DashboardHome = () => {
   const chartData = [
-    { month: "January", desktop: 186, mobile: 80 },
-    { month: "February", desktop: 305, mobile: 200 },
-    { month: "March", desktop: 237, mobile: 120 },
-    { month: "April", desktop: 73, mobile: 190 },
-    { month: "May", desktop: 209, mobile: 130 },
-    { month: "June", desktop: 214, mobile: 140 },
+    { month: "January", Interview: 186, Closed: 80 },
+    { month: "February", Interview: 305, Closed: 200 },
+    { month: "March", Interview: 237, Closed: 120 },
+    { month: "April", Interview: 73, Closed: 190 },
+    { month: "May", Interview: 209, Closed: 130 },
+    { month: "June", Interview: 214, Closed: 140 },
   ];
 
   const chartConfig = {
@@ -119,15 +120,17 @@ const DashboardHome = () => {
           </span>
           <span>Upcoming Interviews</span>
         </Card>
-        <Card className="flex-1 p-3 shadow-xs shadow-[#220901]/50 border-none">
-          <span>Date</span>
-          <span className="text-xl md:text-lg sm:text-md font-bold">
-            Thursday, 14th March, 2025
+        <Card className="flex-1 p-3 border-none shadow-xs shadow-[#220901]/50">
+          <span className="text-5xl md:text-4xl sm:3xl min-[300]:2xl  font-bold">
+            7
           </span>
+          <span>Pending Interviews</span>
         </Card>
-        <Card className="flex-1 p-3 shadow-xs shadow-[#220901]/50 border-none">
-          <span className="text-5xl md:text-4xl sm:3xl  font-bold">5</span>
-          <span>Interview Compeleted</span>
+        <Card className="flex-1 p-3 border-none shadow-xs shadow-[#220901]/50">
+          <span className="text-5xl md:text-4xl sm:3xl min-[300]:2xl  font-bold">
+            15
+          </span>
+          <span>Closed Interviews</span>
         </Card>
       </div>
       <div className="flex gap-4 min-[300px]:flex-col min-[1140px]:flex-row">
@@ -139,8 +142,8 @@ const DashboardHome = () => {
               <YAxis />
               <ChartTooltip />
               <ChartLegend />
-              <Line type="monotone" dataKey="mobile" stroke="#220901" />
-              <Line type="monotone" dataKey="desktop" stroke="#edc2bf" />
+              <Line type="monotone" dataKey="Closed" stroke="#220901" />
+              <Line type="monotone" dataKey="Interview" stroke="#edc2bf" />
             </LineChart>
           </ChartContainer>
         </Card>
