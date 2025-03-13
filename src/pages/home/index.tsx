@@ -59,7 +59,7 @@ import {
 export type Payment = {
   id: string;
   amount: number;
-  status: "pending" | "processing" | "success" | "failed";
+  status: "pending" | "interviewed" | "not interviewed" | "failed";
   email: string;
 };
 
@@ -67,31 +67,31 @@ const data: Payment[] = [
   {
     id: "m5gr84i9",
     amount: 316,
-    status: "success",
+    status: "not interviewed",
     email: "ken99@example.com",
   },
   {
     id: "3u1reuv4",
     amount: 242,
-    status: "success",
+    status: "interviewed",
     email: "Abe45@example.com",
   },
   {
     id: "derv1ws0",
     amount: 837,
-    status: "processing",
+    status: "pending",
     email: "Monserrat44@example.com",
   },
   {
     id: "5kma53ae",
     amount: 874,
-    status: "success",
+    status: "interviewed",
     email: "Silas22@example.com",
   },
   {
     id: "bhqecj4p",
     amount: 721,
-    status: "failed",
+    status: "interviewed",
     email: "carmella@example.com",
   },
 ];
@@ -243,7 +243,7 @@ export const columns: ColumnDef<Payment>[] = [
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
-          Email
+          title
           <ArrowUpDown />
         </Button>
       );
@@ -252,7 +252,7 @@ export const columns: ColumnDef<Payment>[] = [
   },
   {
     accessorKey: "amount",
-    header: () => <div className="text-right">Amount</div>,
+    header: () => <div className="text-right">Date</div>,
     cell: ({ row }) => {
       const amount = parseFloat(row.getValue("amount"));
 
