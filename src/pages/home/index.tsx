@@ -1,18 +1,6 @@
 "use client";
-import * as React from "react";
-import {
-  ColumnDef,
-  ColumnFiltersState,
-  SortingState,
-  VisibilityState,
-  flexRender,
-  getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  useReactTable,
-} from "@tanstack/react-table";
 // import dayjs from "dayjs";
+import { useState, useEffect } from "react";
 import { TrendingDown, TrendingUp } from "lucide-react";
 import { LineChart, CartesianGrid, XAxis, YAxis, Line } from "recharts";
 import {
@@ -24,20 +12,6 @@ import {
 
 import { Card } from "../../components/ui/card";
 
-import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react";
-
-import { Button } from "../../components/ui/button";
-import { Checkbox } from "../../components/ui/checkbox";
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "../../components/ui/dropdown-menu";
-import { Input } from "../../components/ui/input";
 import {
   Table,
   TableBody,
@@ -46,49 +20,18 @@ import {
   TableHeader,
   TableRow,
 } from "../../components/ui/table";
-import Interview from "./interview";
-
-export type Payment = {
-  id: string;
-  date: string;
-  status: "pending" | "interviewed" | "not interviewed" | "failed";
-  email: string;
-};
-
-const data: Payment[] = [
-  {
-    id: "m5gr84i9",
-    date: "2019-01-25",
-    status: "not interviewed",
-    email: "ken99@example.com",
-  },
-  {
-    id: "3u1reuv4",
-    date: "2019-01-25",
-    status: "interviewed",
-    email: "Abe45@example.com",
-  },
-  {
-    id: "derv1ws0",
-    date: "2019-01-25",
-    status: "pending",
-    email: "Monserrat44@example.com",
-  },
-  {
-    id: "5kma53ae",
-    date: "2019-01-25",
-    status: "interviewed",
-    email: "Silas22@example.com",
-  },
-  {
-    id: "bhqecj4p",
-    date: "2019-01-25",
-    status: "interviewed",
-    email: "carmella@example.com",
-  },
-];
+import Nav from "../../layout/nav";
 
 const DashboardHome = () => {
+  const [interviews, setInterviews] = useState([]);
+
+  useEffect(() => {
+    fetch("/public/mock.json")
+      .then((res) => res.json())
+      .then((data) => setInterviews(data))
+      .catch((err) => console.error("Error fetching data:", err));
+  }, []);
+
   const chartData = [
     { month: "January", Interview: 186, Closed: 80 },
     { month: "February", Interview: 305, Closed: 200 },
@@ -113,6 +56,7 @@ const DashboardHome = () => {
 
   return (
     <div className="w-full p-8 flex flex-col gap-6">
+      <Nav />
       <div className="flex w-full gap-4">
         <Card className="flex-1 p-3 border-none shadow-xs shadow-[#220901]/50">
           <span className="text-5xl md:text-4xl sm:3xl min-[300]:2xl  font-bold">
@@ -133,9 +77,34 @@ const DashboardHome = () => {
           <span>Closed Interviews</span>
         </Card>
       </div>
-      <div className="flex gap-4 min-[300px]:flex-col min-[1140px]:flex-row">
-        <Card className="flex-1 border-none  ">
-          <ChartContainer config={chartConfig} className="w-full h-full">
+      <div className="flex gap-4 flex-col lg:flex-row">
+        <div className="flex-1 h-full">
+          <Table className="border border-wine rounded-lg px-4">
+            <TableHeader>
+              <TableRow className="py-5 px-4 text-lg">
+                <TableHead className="w-[100px]">Title</TableHead>
+                <TableHead>Status</TableHead>
+                <TableHead>Date</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {interviews.map((interview) => (
+                <TableRow className="py-6 px-5">
+                  <TableCell className="font-medium">
+                    {interview.title}{" "}
+                  </TableCell>
+                  <TableCell className="font-medium">
+                    {interview.status}{" "}
+                  </TableCell>
+                  <TableCell className="">{interview.dateCreated}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
+
+        <Card className=" flex-1 ">
+          <ChartContainer config={chartConfig} className="">
             <LineChart data={chartData}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="name" />

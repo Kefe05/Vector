@@ -1,4 +1,8 @@
 @import "tailwindcss";
+
+@theme {
+  --color-wine: #220901;
+}
 @layer base {
   :root {
     --sidebar-background: 0 0% 98%;
