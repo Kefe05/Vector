@@ -1,6 +1,6 @@
 "use client";
 // import dayjs from "dayjs";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { TrendingDown, TrendingUp } from "lucide-react";
 import { LineChart, CartesianGrid, XAxis, YAxis, Line } from "recharts";
 import {
@@ -22,15 +22,64 @@ import {
 } from "../../components/ui/table";
 import Nav from "../../layout/nav";
 
-const DashboardHome = () => {
-  const [interviews, setInterviews] = useState([]);
+type Mock = {
+  id: number;
+  title: string;
+  status: "Open" | "Closed" | "In Progress" | "Pending";
+  dateCreated: string;
+};
 
-  useEffect(() => {
-    fetch("/public/mock.json")
-      .then((res) => res.json())
-      .then((data) => setInterviews(data))
-      .catch((err) => console.error("Error fetching data:", err));
-  }, []);
+const DashboardHome = () => {
+  const [interviews] = useState<Mock[]>([
+    {
+      id: 1,
+      title: "Frontend Developer Interview",
+      status: "Open",
+      dateCreated: "2025-03-10",
+    },
+    {
+      id: 2,
+      title: "Backend Engineer Screening",
+      status: "Closed",
+      dateCreated: "2025-02-28",
+    },
+    {
+      id: 3,
+      title: "UI/UX Designer Assessment",
+      status: "In Progress",
+      dateCreated: "2025-03-05",
+    },
+    {
+      id: 4,
+      title: "React.js Developer Round 1",
+      status: "Open",
+      dateCreated: "2025-03-12",
+    },
+    {
+      id: 5,
+      title: "Full Stack Developer Screening",
+      status: "Closed",
+      dateCreated: "2025-02-20",
+    },
+    {
+      id: 5,
+      title: "Data Scientist Interview",
+      status: "Pending",
+      dateCreated: "2025-02-20",
+    },
+    {
+      id: 5,
+      title: "Data Analyst Screening",
+      status: "Closed",
+      dateCreated: "2025-02-20",
+    },
+    {
+      id: 5,
+      title: "Python Developer Screening",
+      status: "Closed",
+      dateCreated: "2025-02-20",
+    },
+  ]);
 
   const chartData = [
     { month: "January", Interview: 186, Closed: 80 },
