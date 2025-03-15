@@ -37,10 +37,12 @@ import {
   AlertDialogTrigger,
 } from "../../components/ui/alert-dialog";
 
+type StatusType = "Open" | "Closed" | "In Progress" | "Pending";
+
 type Mock = {
   id: number;
   title: string;
-  status: "Open" | "Closed" | "In Progress" | "Pending";
+  status: StatusType;
   dateCreated: string;
 };
 
@@ -76,27 +78,9 @@ const Interview = () => {
       status: "Closed",
       dateCreated: "2025-02-20",
     },
-    {
-      id: 6,
-      title: "Data Scientist Interview",
-      status: "Pending",
-      dateCreated: "2025-02-20",
-    },
-    {
-      id: 7,
-      title: "Data Analyst Screening",
-      status: "Closed",
-      dateCreated: "2025-02-20",
-    },
-    {
-      id: 8,
-      title: "Python Developer Screening",
-      status: "Closed",
-      dateCreated: "2025-02-20",
-    },
   ]);
 
-  // Form Schema
+  // Form Schema with strict enum validation
   const formSchema = z.object({
     title: z
       .string()
@@ -105,15 +89,26 @@ const Interview = () => {
     dateCreated: z.string().min(1, { message: "Date is required." }),
   });
 
-  // Initialize useForm
-  const form = useForm({
+  type FormValues = z.infer<typeof formSchema>;
+
+  // Initialize useForm with correct type
+  const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
-    defaultValues: { title: "", status: "Open", dateCreated: "" },
+    defaultValues: {
+      title: "",
+      status: "Open",
+      dateCreated: "",
+    },
   });
 
   // Handle Form Submission
-  const onSubmit = (data: Mock) => {
-    setInterviews([...interviews, { ...data, id: interviews.length + 1 }]);
+  const onSubmit = (data: FormValues) => {
+    const newInterview: Mock = {
+      id: interviews.length + 1,
+      ...data,
+    };
+
+    setInterviews([...interviews, newInterview]);
     form.reset();
   };
 
