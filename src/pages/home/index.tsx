@@ -1,5 +1,3 @@
-"use client";
-// import dayjs from "dayjs";
 import { useState } from "react";
 import { TrendingDown, TrendingUp } from "lucide-react";
 import { LineChart, CartesianGrid, XAxis, YAxis, Line } from "recharts";
@@ -20,7 +18,6 @@ import {
   TableHeader,
   TableRow,
 } from "../../components/ui/table";
-import Nav from "../../layout/nav";
 
 type Mock = {
   id: number;
@@ -105,7 +102,7 @@ const DashboardHome = () => {
 
   return (
     <div className="w-full p-8 flex flex-col gap-6">
-      <Nav />
+      {/* <Nav /> */}
       <div className="flex w-full gap-4">
         <Card className="flex-1 p-3 border-none shadow-xs shadow-[#220901]/50">
           <span className="text-5xl md:text-4xl sm:3xl min-[300]:2xl  font-bold">
