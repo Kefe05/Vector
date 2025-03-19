@@ -37,8 +37,8 @@ export default function InterviewSession() {
   };
 
   return (
-    <div className="flex flex-col items-center gap-6 mt-10">
-      <Card className="w-[80%] md:w-[500px] p-6">
+    <div className="flex flex-col items-center gap-6  bg-wine h-screen">
+      <Card className="w-[80%] md:w-[500px] p-6 bg-white mt-12">
         <h2 className="text-xl font-bold">
           Question {currentQuestionIndex + 1} of {questions.length}
         </h2>

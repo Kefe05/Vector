@@ -24,6 +24,11 @@ const items = [
     url: "interviews",
     icon: Inbox,
   },
+  {
+    title: "Candidate",
+    url: "candidate",
+    icon: Inbox,
+  },
 ];
 
 export function AppSidebar() {
