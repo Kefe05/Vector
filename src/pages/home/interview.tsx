@@ -1,227 +1,104 @@
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "../../components/ui/table";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
 import { useState } from "react";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "../../components/ui/form";
-import { Input } from "../../components/ui/input";
+import { useNavigate } from "react-router-dom";
+import { Card } from "../../components/ui/card";
 import { Button } from "../../components/ui/button";
+import { Input } from "../../components/ui/input";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../../components/ui/select";
-import {
-  AlertDialog,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "../../components/ui/alert-dialog";
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "../../components/ui/dialog";
+import { ChevronDown, ChevronUp } from "lucide-react";
+import InterviewTable from "../../components/reusables/interview-table";
 
-type StatusType = "Open" | "Closed" | "In Progress" | "Pending";
-
-type Mock = {
-  id: number;
-  title: string;
-  status: StatusType;
-  dateCreated: string;
-};
-
-const Interview = () => {
-  const [interviews, setInterviews] = useState<Mock[]>([
-    {
-      id: 1,
-      title: "Frontend Developer Interview",
-      status: "Open",
-      dateCreated: "2025-03-10",
-    },
-    {
-      id: 2,
-      title: "Backend Engineer Screening",
-      status: "Closed",
-      dateCreated: "2025-02-28",
-    },
-    {
-      id: 3,
-      title: "UI/UX Designer Assessment",
-      status: "In Progress",
-      dateCreated: "2025-03-05",
-    },
-    {
-      id: 4,
-      title: "React.js Developer Round 1",
-      status: "Open",
-      dateCreated: "2025-03-12",
-    },
-    {
-      id: 5,
-      title: "Full Stack Developer Screening",
-      status: "Closed",
-      dateCreated: "2025-02-20",
-    },
+export default function Interview() {
+  const [showQuestions, setShowQuestions] = useState(false);
+  const [questions, setQuestions] = useState([
+    "What is React?",
+    "Explain useState hook.",
+    "What are props in React?",
+    "How does useEffect work?",
+    "What is JSX?",
+    "Explain the virtual DOM.",
   ]);
+  const [newQuestion, setNewQuestion] = useState("");
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const navigate = useNavigate();
 
-  // Form Schema with strict enum validation
-  const formSchema = z.object({
-    title: z
-      .string()
-      .min(2, { message: "Title must be at least 2 characters." }),
-    status: z.enum(["Open", "Closed", "In Progress", "Pending"]),
-    dateCreated: z.string().min(1, { message: "Date is required." }),
-  });
+  const addQuestion = () => {
+    if (newQuestion.trim()) {
+      setQuestions([...questions, newQuestion]);
+      setNewQuestion("");
+      setIsDialogOpen(false);
+    }
+  };
 
-  type FormValues = z.infer<typeof formSchema>;
-
-  // Initialize useForm with correct type
-  const form = useForm<FormValues>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      title: "",
-      status: "Open",
-      dateCreated: "",
-    },
-  });
-
-  // Handle Form Submission
-  const onSubmit = (data: FormValues) => {
-    const newInterview: Mock = {
-      id: interviews.length + 1,
-      ...data,
-    };
-
-    setInterviews([...interviews, newInterview]);
-    form.reset();
+  const startInterview = () => {
+    navigate("/interview-session", { state: { questions } });
   };
 
   return (
     <div className="flex flex-col gap-6">
-      {/* Interview Table */}
-      <div className="w-full sm:w-[80%] px-3">
-        <Table className="border border-wine rounded-lg px-4">
-          <TableHeader>
-            <TableRow className="py-5 px-4 text-lg">
-              <TableHead className="w-[100px]">Title</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead>Date</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {interviews.map((interview) => (
-              <TableRow key={interview.id} className="py-6 px-5">
-                <TableCell className="font-medium">{interview.title}</TableCell>
-                <TableCell className="font-medium">
-                  {interview.status}
-                </TableCell>
-                <TableCell>{interview.dateCreated}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </div>
+      <InterviewTable />
+      <Card className="w-[80%] m-auto md:m-0 md:w-[500px] p-2 md:ml-4 relative">
+        <div className="flex items-center justify-between">
+          <span className="text-sm font-bold">Monday, March 17th 2025</span>
+          <span>Closed</span>
+        </div>
+        <div className="flex justify-between">
+          <div className="flex flex-col gap-2">
+            <h2 className="sm:text-3xl">Frontend Developer</h2>
+            <p>{questions.length} questions</p>
+            <Button
+              className="bg-wine text-white"
+              onClick={() => setIsDialogOpen(true)}>
+              Add Questions
+            </Button>
+          </div>
+          <div>
+            <Button className="bg-wine text-white" onClick={startInterview}>
+              Start Interview
+            </Button>
+            <div className="absolute -bottom-7 right-0">
+              <Button
+                className="bg-gray-200 text-black flex items-center gap-2"
+                onClick={() => setShowQuestions(!showQuestions)}>
+                {showQuestions ? (
+                  <ChevronUp size={16} />
+                ) : (
+                  <ChevronDown size={16} />
+                )}
+              </Button>
+              {showQuestions && (
+                <ul className="mt-2 p-2 border rounded bg-gray-100">
+                  {questions.map((q, index) => (
+                    <li key={index} className="py-1 border-b last:border-0">
+                      {q}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          </div>
+        </div>
+      </Card>
 
-      {/* Create New Interview Dialog */}
-      <AlertDialog>
-        <AlertDialogTrigger>
-          <Button className="bg-wine text-white w-fit ml-3">
-            New Interview
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Add a new question</DialogTitle>
+          </DialogHeader>
+          <Input
+            value={newQuestion}
+            onChange={(e) => setNewQuestion(e.target.value)}
+            placeholder="Enter question"
+          />
+          <Button className="bg-wine text-white" onClick={addQuestion}>
+            Add Question
           </Button>
-        </AlertDialogTrigger>
-        <AlertDialogContent className="bg-wine border-none text-white">
-          <AlertDialogHeader>
-            <AlertDialogTitle>Create New Interview</AlertDialogTitle>
-          </AlertDialogHeader>
-
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-              {/* Interview Title */}
-              <FormField
-                control={form.control}
-                name="title"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Title</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Enter interview title" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              {/* Interview Date */}
-              <FormField
-                control={form.control}
-                name="dateCreated"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Date</FormLabel>
-                    <FormControl>
-                      <Input type="date" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              {/* Interview Status */}
-              <FormField
-                control={form.control}
-                name="status"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Status</FormLabel>
-                    <FormControl>
-                      <Select
-                        onValueChange={field.onChange}
-                        value={field.value}>
-                        <SelectTrigger className="w-full">
-                          <SelectValue placeholder="Select status" />
-                        </SelectTrigger>
-                        <SelectContent className="bg-white">
-                          <SelectItem value="Open">Open</SelectItem>
-                          <SelectItem value="Closed">Closed</SelectItem>
-                          <SelectItem value="In Progress">
-                            In Progress
-                          </SelectItem>
-                          <SelectItem value="Pending">Pending</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <Button type="submit">Submit</Button>
-            </form>
-          </Form>
-
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+        </DialogContent>
+      </Dialog>
     </div>
   );
-};
-
-export default Interview;
+}

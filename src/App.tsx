@@ -4,6 +4,7 @@ import NotFound from "./pages/no-page";
 import Dashboard from "./pages/dashboard";
 import Interview from "./pages/home/interview";
 import DashboardHome from "./pages/home/index";
+import Session from "./pages/session";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
           <Route path="interviews" element={<Interview />} />
         </Route>
         <Route path="*" element={<NotFound />} />
+        <Route path="/interview-session" element={<Session />} />
       </Routes>
     </BrowserRouter>
   );
