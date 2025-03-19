@@ -11,7 +11,7 @@ import {
 } from "../../components/ui/dialog";
 
 function Candiate() {
-  const [showQuestions, setShowQuestions] = useState(false);
+  // const [showQuestions, setShowQuestions] = useState(false);
   const [questions, setQuestions] = useState([
     "What is React?",
     "Explain useState hook.",
