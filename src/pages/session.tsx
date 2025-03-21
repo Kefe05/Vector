@@ -16,7 +16,7 @@ export default function InterviewSession() {
   const [mediaStream, setMediaStream] = useState<MediaStream | null>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
-  const [setRecordedChunks] = useState<Blob[]>([]);
+  // const [setRecordedChunks] = useState<Blob[]>([]);s
   const [videoURL, setVideoURL] = useState<string>("");
 
   useEffect(() => {
@@ -60,7 +60,7 @@ export default function InterviewSession() {
         chunks.push(event.data);
       mediaRecorderRef.current.onstop = () => {
         const blob = new Blob(chunks, { type: "video/webm" });
-        setRecordedChunks(chunks);
+        // setRecordedChunks(chunks);
         setVideoURL(URL.createObjectURL(blob));
       };
       mediaRecorderRef.current.start();
@@ -80,7 +80,7 @@ export default function InterviewSession() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center gap-6  bg-wine h-screen">
+    <div className="flex flex-col items-center justify-center gap-6  bg-wine  h-screen overflow-y-scroll">
       <Card className="w-[80%] md:w-[500px] p-6 bg-white">
         {currentQuestionIndex === questions.length - 1 ? (
           <div className="flex flex-col items-center">
@@ -95,7 +95,7 @@ export default function InterviewSession() {
             <p className="mt-4">
               Please record a 2-minute introduction about yourself.
             </p>
-            <div className="flex gap-3">
+            <div className="flex flex-col md:flex-row gap-3">
               <div>
                 <video
                   ref={videoRef}
