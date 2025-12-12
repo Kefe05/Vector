@@ -47,46 +47,50 @@
 
 @custom-variant dark (&:is(.dark *));
 
-.home {
-  background: url("./assets/vector-bg.jpg") no-repeat;
-  background-size: cover;
+/* Removed old home background styles - using gradient backgrounds in components now */
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-@keyframes fadein {
+@keyframes fadeIn {
   from {
-    opacity: 0.1;
+    opacity: 0;
   }
   to {
     opacity: 1;
   }
 }
 
-@keyframes fromTop {
+@keyframes slideInLeft {
   from {
-    translate: 0 -40px;
+    opacity: 0;
+    transform: translateX(-30px);
   }
   to {
-    translate: 0;
-  }
-}
-@keyframes fromTopMin {
-  from {
-    translatey: 0 -30px;
-  }
-  to {
-    translate: 0;
+    opacity: 1;
+    transform: translateX(0);
   }
 }
 
-.heading-button {
-  animation: fadein 3s ease-in-out;
+/* Animation classes */
+.animate-fadeInUp {
+  animation: fadeInUp 0.6s ease-out;
 }
 
-.heading {
-  animation: fromTop 3s ease-in-out;
+.animate-fadeIn {
+  animation: fadeIn 0.8s ease-out;
 }
-.heading-p {
-  animation: fromTop 3s ease-in-out;
+
+.animate-slideInLeft {
+  animation: slideInLeft 0.6s ease-out;
 }
 
 :root {

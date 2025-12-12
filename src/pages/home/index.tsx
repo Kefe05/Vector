@@ -1,168 +1,182 @@
 import { useState } from "react";
-import { TrendingDown, TrendingUp } from "lucide-react";
-import { LineChart, CartesianGrid, XAxis, YAxis, Line } from "recharts";
-import {
-  ChartConfig,
-  ChartContainer,
-  ChartLegend,
-  ChartTooltip,
-} from "../../components/ui/chart";
-
-import { Card } from "../../components/ui/card";
-
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "../../components/ui/table";
-
-type Mock = {
-  id: number;
-  title: string;
-  status: "Open" | "Closed" | "In Progress" | "Pending";
-  dateCreated: string;
-};
+import { TrendingUp, Users, Target, Award } from "lucide-react";
+import { MetricCard } from "../../components/reusables/metric-card";
+import { JobHeader } from "../../components/reusables/job-header";
+import { PipelineStage } from "../../components/reusables/pipeline-stage";
+import { Candidate } from "../../components/reusables/candidate-card";
 
 const DashboardHome = () => {
-  const [interviews] = useState<Mock[]>([
+  // Sample candidate data matching the UI
+  const [candidates] = useState<Candidate[]>([
     {
-      id: 1,
-      title: "Frontend Developer Interview",
-      status: "Open",
-      dateCreated: "2025-03-10",
+      id: "1",
+      name: "Alex Morgan",
+      role: "Sr. Designer",
+      stage: "applied",
+      submittedAt: "2024-01-14",
+      priority: "high"
     },
     {
-      id: 2,
-      title: "Backend Engineer Screening",
-      status: "Closed",
-      dateCreated: "2025-02-28",
+      id: "2",
+      name: "Jordan Doe",
+      role: "Developer", 
+      stage: "applied",
+      submittedAt: "2024-01-13",
+      matchScore: 72
     },
     {
-      id: 3,
-      title: "UI/UX Designer Assessment",
-      status: "In Progress",
-      dateCreated: "2025-03-05",
+      id: "3",
+      name: "Sarah Lee",
+      role: "Designer",
+      stage: "applied",
+      submittedAt: "2024-01-12"
     },
     {
-      id: 4,
-      title: "React.js Developer Round 1",
-      status: "Open",
-      dateCreated: "2025-03-12",
+      id: "4",
+      name: "James Miller",
+      role: "Product Designer",
+      stage: "screened",
+      matchScore: 92,
+      skills: ["Figma", "React"],
+      submittedAt: "2024-01-10"
     },
     {
-      id: 5,
-      title: "Full Stack Developer Screening",
-      status: "Closed",
-      dateCreated: "2025-02-20",
+      id: "5",
+      name: "Casey Key",
+      role: "Product Manager",
+      stage: "screened",
+      matchScore: 65,
+      skills: ["Strategy", "Analytics"],
+      submittedAt: "2024-01-09"
     },
     {
-      id: 5,
-      title: "Data Scientist Interview",
-      status: "Pending",
-      dateCreated: "2025-02-20",
+      id: "6",
+      name: "Sam Smith",
+      role: "Frontend Dev",
+      stage: "technical",
+      scheduledTime: "2024-01-15T14:00:00Z",
+      submittedAt: "2024-01-08"
     },
     {
-      id: 5,
-      title: "Data Analyst Screening",
-      status: "Closed",
-      dateCreated: "2025-02-20",
-    },
-    {
-      id: 5,
-      title: "Python Developer Screening",
-      status: "Closed",
-      dateCreated: "2025-02-20",
-    },
+      id: "7",
+      name: "Lisa Wong",
+      role: "UX Engineer",
+      stage: "technical", 
+      scheduledTime: "2024-01-16T14:00:00Z",
+      submittedAt: "2024-01-07"
+    }
   ]);
 
-  const chartData = [
-    { month: "January", Interview: 186, Closed: 80 },
-    { month: "February", Interview: 305, Closed: 200 },
-    { month: "March", Interview: 237, Closed: 120 },
-    { month: "April", Interview: 73, Closed: 190 },
-    { month: "May", Interview: 209, Closed: 130 },
-    { month: "June", Interview: 214, Closed: 140 },
-  ];
+  // Group candidates by stage
+  const candidatesByStage = {
+    applied: candidates.filter(c => c.stage === "applied"),
+    screened: candidates.filter(c => c.stage === "screened"), 
+    technical: candidates.filter(c => c.stage === "technical"),
+    interview: candidates.filter(c => c.stage === "interview"),
+    hired: candidates.filter(c => c.stage === "hired")
+  };
 
-  const chartConfig = {
-    desktop: {
-      label: "Desktop",
-      color: "hsl(var(--chart-1))",
-      icon: TrendingDown,
-    },
-    mobile: {
-      label: "Mobile",
-      color: "hsl(var(--chart-2))",
-      icon: TrendingUp,
-    },
-  } satisfies ChartConfig;
+  const handleCandidateAction = (action: string, candidate: Candidate) => {
+    console.log(`${action} action for`, candidate.name);
+  };
+
+  const handleAddCandidate = () => {
+    console.log("Add candidate clicked");
+  };
+
+  const handleFilterToggle = () => {
+    console.log("Filter toggle clicked");
+  };
+
+  // Calculate total metrics
+  const totalApplicants = candidates.length;
+  const shortlisted = candidatesByStage.screened.length + candidatesByStage.technical.length;
+  const inProgress = candidatesByStage.technical.length;
+  const hiresMade = candidatesByStage.hired.length;
 
   return (
-    <div className="w-full p-8 flex flex-col gap-6">
-      {/* <Nav /> */}
-      <div className="flex w-full gap-4">
-        <Card className="flex-1 p-3 border-none shadow-xs shadow-[#220901]/50">
-          <span className="text-5xl md:text-4xl sm:3xl min-[300]:2xl  font-bold">
-            10
-          </span>
-          <span>Upcoming Interviews</span>
-        </Card>
-        <Card className="flex-1 p-3 border-none shadow-xs shadow-[#220901]/50">
-          <span className="text-5xl md:text-4xl sm:3xl min-[300]:2xl  font-bold">
-            7
-          </span>
-          <span>Pending Interviews</span>
-        </Card>
-        <Card className="flex-1 p-3 border-none shadow-xs shadow-[#220901]/50">
-          <span className="text-5xl md:text-4xl sm:3xl min-[300]:2xl  font-bold">
-            15
-          </span>
-          <span>Closed Interviews</span>
-        </Card>
-      </div>
-      <div className="flex gap-4 flex-col lg:flex-row">
-        <div className="flex-1 h-full">
-          <Table className="border border-wine rounded-lg px-4">
-            <TableHeader>
-              <TableRow className="py-5 px-4 text-lg">
-                <TableHead className="w-[100px]">Title</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Date</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {interviews.map((interview) => (
-                <TableRow className="py-6 px-5">
-                  <TableCell className="font-medium">
-                    {interview.title}{" "}
-                  </TableCell>
-                  <TableCell className="font-medium">
-                    {interview.status}{" "}
-                  </TableCell>
-                  <TableCell className="">{interview.dateCreated}</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+    <div className="h-full bg-gray-50">
+       <JobHeader 
+        jobTitle="Senior Product Designer"
+        status="active"
+        location="San Francisco (Remote)"
+        type="remote"
+        onAddCandidate={handleAddCandidate}
+        onFilterToggle={handleFilterToggle}
+      />
+      
+      <div className="p-6 space-y-6">
+        {/* Metrics Row */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <MetricCard 
+            title="Total Applicants"
+            value={totalApplicants.toLocaleString()}
+            trend={{ value: "+12%", isPositive: true }}
+            icon={<Users className="w-5 h-5" />}
+          />
+          <MetricCard 
+            title="Shortlisted"
+            value={shortlisted}
+            trend={{ value: "+5%", isPositive: true }}
+            icon={<Target className="w-5 h-5" />}
+          />
+          <MetricCard 
+            title="In Progress"
+            value={inProgress}
+            trend={{ value: "+2%", isPositive: true }}
+            icon={<TrendingUp className="w-5 h-5" />}
+          />
+          <MetricCard 
+            title="Hires Made"
+            value={`${hiresMade} this week`}
+            icon={<Award className="w-5 h-5" />}
+          />
         </div>
 
-        <Card className=" flex-1 ">
-          <ChartContainer config={chartConfig} className="">
-            <LineChart data={chartData}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="name" />
-              <YAxis />
-              <ChartTooltip />
-              <ChartLegend />
-              <Line type="monotone" dataKey="Closed" stroke="#220901" />
-              <Line type="monotone" dataKey="Interview" stroke="#edc2bf" />
-            </LineChart>
-          </ChartContainer>
-        </Card>
-      </div>
+        {/* Pipeline Stages */}
+        <div className="flex space-x-6 overflow-x-auto pb-6">
+          <PipelineStage 
+            title="Applied"
+            count={candidatesByStage.applied.length}
+            candidates={candidatesByStage.applied}
+            stage="applied"
+            onCandidateAction={handleCandidateAction}
+            onAddCandidate={handleAddCandidate}
+          />
+          <PipelineStage 
+            title="Screened"
+            count={candidatesByStage.screened.length}
+            candidates={candidatesByStage.screened}
+            stage="screened"
+            onCandidateAction={handleCandidateAction}
+            onAddCandidate={handleAddCandidate}
+          />
+          <PipelineStage 
+            title="Technical"
+            count={candidatesByStage.technical.length}
+            candidates={candidatesByStage.technical}
+            stage="technical"
+            onCandidateAction={handleCandidateAction}
+            onAddCandidate={handleAddCandidate}
+          />
+          <PipelineStage 
+            title="Interview"
+            count={candidatesByStage.interview.length}
+            candidates={candidatesByStage.interview}
+            stage="interview"
+            onCandidateAction={handleCandidateAction}
+            onAddCandidate={handleAddCandidate}
+          />
+          <PipelineStage 
+            title="Hired"
+            count={candidatesByStage.hired.length}
+            candidates={candidatesByStage.hired}
+            stage="hired"
+            onCandidateAction={handleCandidateAction}
+            onAddCandidate={handleAddCandidate}
+          />
+        </div> 
+      </div> 
     </div>
   );
 };
